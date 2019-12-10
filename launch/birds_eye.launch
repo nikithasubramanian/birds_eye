@@ -1,0 +1,23 @@
+<launch>
+
+    <include file="$(find birds_eye)/launch/camera.launch" />
+    <!--<include file="$(find prizm_ros)/launch/twist_controller.launch" />-->
+    <include file="$(find lidar2d)/launch/hlds.launch" />
+
+    <!-- launch the node -->
+    <node name="birds_eye" pkg="birds_eye" type="birds_eye" respawn="true" respawn_delay="10" output="screen">
+        <!-- Use a specific camera path -->
+        <param name="camera_topic" type="string" value="/my_camera/cam_pub/image_raw" /> 
+        <!--<param name="scan_topic"   type="string" value="/lidar2d/scan" />-->
+        <param name="scan_topic" type="string" value="/lidar2d/detect/scan" />
+    </node>
+
+    <node name="my_rqt"
+        pkg="rqt_gui"
+        type="rqt_gui"
+        respawn="false"
+        output="screen"
+        args="--perspective-file $(find birds_eye)/rqt.perspective"/>
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find birds_eye)/rviz.rviz" />
+</launch>
